@@ -85,6 +85,20 @@ public class BoardController {
         return "redirect:/board/" + boardName;
     }
 
+    @PostMapping("/comment/{boardName}/{id}")
+    public String commentWrite(Model model, @PathVariable String boardName, @PathVariable int id, HttpServletRequest request, HttpSession session) {
+        int boardId = 0;
+        switch (boardName) {
+            case "free" -> boardId = 1;
+            case "notice" -> boardId = 2;
+        }
+        User user = (User) session.getAttribute("user");
+        int userId = user.getId();
+        String content = request.getParameter("content");
+        commentService.commentWrite(userId, boardId, content);
+        return "redirect:/board/" + boardName + "/" + id;
+    }
+
     @PatchMapping("/board/{boardName}/{id}")
     public String update(@PathVariable String boardName, @PathVariable int id, Model model, HttpServletRequest request) {
         int boardId = 0;

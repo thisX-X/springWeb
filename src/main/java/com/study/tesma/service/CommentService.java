@@ -24,4 +24,12 @@ public class CommentService {
         }
         return comments;
     }
+
+    public void commentWrite(int userId, int boardId, String content) {
+        Comment comment = new Comment();
+        comment.setUserId(userId);
+        comment.setBoardId(boardId);
+        comment.setContent(content);
+        commentRepository.save(comment);
+    }
 }
