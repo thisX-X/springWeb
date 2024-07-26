@@ -3,8 +3,10 @@ package com.study.tesma.controller;
 
 import com.study.tesma.ApiResponse;
 import com.study.tesma.entity.Board;
+import com.study.tesma.entity.User;
 import com.study.tesma.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,16 +56,18 @@ public class BoardController {
     }
 
     @PostMapping("/board/{boardName}")
-    public String write(Model model, @PathVariable String boardName, HttpServletRequest request) {
+    public String write(Model model, @PathVariable String boardName, HttpServletRequest request, HttpSession session) {
         int boardId = 0;
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
         }
+        User user = (User) session.getAttribute("user");
+        int userId = user.getId();
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
-        boardService.write(boardId, title, content);
+        boardService.write(boardId, userId, title, content);
 
         return "redirect:/board/" + boardName;
     }

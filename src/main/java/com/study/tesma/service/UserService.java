@@ -13,12 +13,16 @@ public class UserService {
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email);
 
+
         User returnUser = new User();
 
         if (user != null) {
             if (user.getPassword().equals(password)) {
                 returnUser.setId(user.getId());
                 returnUser.setEmail(user.getEmail());
+            }
+            else {
+                return null;
             }
         }
         return returnUser;

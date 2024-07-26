@@ -19,17 +19,24 @@
         </tr>
         </thead>
         <tbody>
-<!--
-        <tr th:each="board : ${boards}">
+
+        <tr th:each="board : ${list}">
             <td th:text="${board.id}"></td>
             <td th:text="${board.title}">Mark</td>
-            <td th:text="${board.writer}">Otto</td>
-            <td th:text="${board.updatedAt}">@mdo</td>
+            <td th:text="${board.writer}">mark</td>
+            <td th:text="${board.updateAt}">@mdo</td>
         </tr>
-        -->
 
         </tbody>
     </table>
+
+    <div class="container" th:if="${session.user != null}">
+        <button class="submit" onclick="location.href='/writer'">글 작성</button>
+    </div>
+    <div class="container" th:if="${session.user == null}">
+
+    </div>
+
 </div>
 
 <footer th:replace="layout/footer::footer"></footer>

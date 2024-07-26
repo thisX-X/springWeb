@@ -20,14 +20,20 @@ public class UserController {
         return "login";
     }
 
+    @GetMapping("/join")
+    public String join() {
+        return "join";
+    }
+
     @PostMapping("/user")
     public String login(Model model, HttpSession session, HttpServletRequest request) {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
         User user = userService.login(email, password);
-        session.setAttribute("user", user);
-
+        if (user.getEmail() != null) {
+            session.setAttribute("user", user);
+        }
         return "main";
     }
 
@@ -40,5 +46,11 @@ public class UserController {
         userService.join(email, password, name);
 
         return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "main";
     }
 }

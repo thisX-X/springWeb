@@ -2,6 +2,8 @@ package com.study.tesma.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +16,8 @@ public class Board {
 
     private int boardId;
 
+    private int userId;
+
     private String title;
 
     private String content;
@@ -21,4 +25,9 @@ public class Board {
     private LocalDateTime createAt;
 
     private LocalDateTime updateAt;
+
+    @Setter
+    @Getter
+    @Transient
+    private String writer;
 }
