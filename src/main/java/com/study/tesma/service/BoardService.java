@@ -44,7 +44,11 @@ public class BoardService {
     }
 
     public Optional<Board> getBoard(int boardId, int id) {
-        return boardRepository.findById(id);
+        Optional<Board> board = boardRepository.findById(id);
+        User user = boardRepository.findByUserId(board.get().getUserId());
+        board.get().setWriter(user.getName());
+
+        return board;
     }
 
     public void update(String title, String content, int id) {

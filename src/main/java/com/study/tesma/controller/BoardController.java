@@ -3,14 +3,17 @@ package com.study.tesma.controller;
 
 import com.study.tesma.ApiResponse;
 import com.study.tesma.entity.Board;
+import com.study.tesma.entity.Comment;
 import com.study.tesma.entity.User;
 import com.study.tesma.service.BoardService;
+import com.study.tesma.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,9 @@ import java.util.Optional;
 public class BoardController {
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -41,7 +47,7 @@ public class BoardController {
         return "board";
     }
 
-    @PostMapping("/board/{boardName}/{id}")
+    @GetMapping("/board/{boardName}/{id}")
     public String view(@PathVariable String boardName, @PathVariable int id, Model model) {
         int boardId = 0;
         switch (boardName) {
@@ -49,8 +55,15 @@ public class BoardController {
             case "notice" -> boardId = 2;
         }
         Optional<Board> board = boardService.getBoard(boardId, id);
+        List<Comment> comments = commentService.getComments(id);
+        if (comments == null || comments.isEmpty()) {
+            Object commnets = null;
+        }
 
+        String currentUrl = ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString();
+        model.addAttribute("currentUrl", currentUrl);
         model.addAttribute("board", board.get());
+        model.addAttribute("comments", comments);
 
         return "boardView";
     }
