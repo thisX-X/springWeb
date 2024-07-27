@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/join")
-    public String join() {
+    public String join(Model model) {
         return "join";
     }
 
@@ -34,7 +34,7 @@ public class UserController {
         if (user.getEmail() != null) {
             session.setAttribute("user", user);
         }
-        return "main";
+        return "redirect:/";
     }
 
     @PostMapping("/join")

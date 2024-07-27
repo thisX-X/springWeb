@@ -20,6 +20,7 @@ public class UserService {
             if (user.getPassword().equals(password)) {
                 returnUser.setId(user.getId());
                 returnUser.setEmail(user.getEmail());
+                returnUser.setName(user.getName());
             }
             else {
                 return null;

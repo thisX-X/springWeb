@@ -30,6 +30,16 @@ public class BoardController {
 
     @GetMapping("/")
     public String index(Model model) {
+        List<Board> boards = boardService.getAllboard();
+
+        for (Board board : boards) {
+            switch (board.getBoardId()) {
+                case 1 -> board.setBoardName("free");
+                case 2 -> board.setBoardName("notice");
+            }
+        }
+
+        model.addAttribute("boards", boards);
         return "main";
     }
 

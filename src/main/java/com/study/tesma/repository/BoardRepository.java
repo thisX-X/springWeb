@@ -17,4 +17,6 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
 
     @Query("SELECT u FROM User u WHERE u.id = :userId")
     User findByUserId(@Param("userId") int userId);
+
+    List<Board> findTop5ByBoardIdOrderByCreateAtDesc(int boardId);
 }

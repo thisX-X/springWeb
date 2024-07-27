@@ -30,4 +30,9 @@ public class Board {
     @Getter
     @Transient
     private String writer;
+
+    @Setter
+    @Getter
+    @Transient
+    private String boardName;
 }

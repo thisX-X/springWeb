@@ -2,14 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>게시판 메인화면</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .table-container {
+            margin-top: 50px;
+        }
+        .table thead {
+            background-color: #343a40;
+            color: white;
+        }
+        .btn-write {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
 <header th:replace="layout/header::header"></header>
 
-<div class="container">
-    <table class="table">
+<div class="container table-container">
+    <h1 class="text-center">게시판</h1>
+    <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col">#</th>
@@ -23,20 +39,16 @@
         <tr th:each="board : ${list}">
             <td th:text="${board.id}"></td>
             <td><a th:text="${board.title}" th:href="${currentUrl + '/' + board.id}"></a></td>
-            <td th:text="${board.writer}">mark</td>
-            <td th:text="${board.updateAt}">@mdo</td>
+            <td th:text="${board.writer}"></td>
+            <td th:text="${board.updateAt}"></td>
         </tr>
 
         </tbody>
     </table>
 
-    <div class="container" th:if="${session.user != null}">
-        <button class="submit" onclick="location.href='/writer'">글 작성</button>
+    <div class="d-flex justify-content-end btn-write" th:if="${session.user != null}">
+        <button class="btn btn-primary" onclick="location.href='/writer'">글 작성</button>
     </div>
-    <div class="container" th:if="${session.user == null}">
-
-    </div>
-
 </div>
 
 <footer th:replace="layout/footer::footer"></footer>

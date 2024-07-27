@@ -19,7 +19,9 @@ public class BoardService {
     private UserRepository userRepository;
 
     public List<Board> getBoardList(int boardId) {
-        List<Board> boards = boardRepository.findAllByBoardId(boardId);
+        List<Board> boards = boardRepository.findTop5ByBoardIdOrderByCreateAtDesc(boardId);
+        // List<Sample> findByGenderOrderByAgeDesc(String gender);
+        //List<Sample> findAllByOrderByAgeDesc();
 
         for (Board board : boards) {
             User user = boardRepository.findByUserId(board.getUserId());
@@ -57,5 +59,14 @@ public class BoardService {
         updateBoard.setTitle(title);
         updateBoard.setContent(content);
         boardRepository.save(updateBoard);
+    }
+
+    public List<Board> getAllboard() {
+        List<Board> boards = boardRepository.findAll();
+        for (Board board : boards) {
+            User user = boardRepository.findByUserId(board.getUserId());
+            board.setWriter(user.getName());
+        }
+        return boards;
     }
 }
