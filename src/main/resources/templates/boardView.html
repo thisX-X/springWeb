@@ -43,11 +43,23 @@
         .comment-text {
             margin-top: 5px;
         }
+        .comment-form {
+            margin-top: 20px;
+        }
     </style>
+
+    <script>
+        function setFormAction() {
+            var currentUrl = window.location.pathname; // 현재 URL 경로를 가져옴
+            var formAction = currentUrl + "/comment"; // 현재 URL 경로에 /comment를 추가
+            document.getElementById("commentForm").action = formAction; // 폼의 action 속성 설정
+        }
+    </script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
-<body>
+<body onload="setFormAction()">
+
 <header th:replace="layout/header::header"></header>
 
 <div class="container">
@@ -59,6 +71,18 @@
             [[${board.content}]]
         </div>
     </div>
+
+    <div class="comment-form">
+        <h3>댓글 작성하기</h3>
+        <form id="commentForm" method="post">
+            <div class="mb-3">
+                <label for="content" class="form-label">내용</label>
+                <textarea class="form-control" id="content" name="content" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">댓글 작성</button>
+        </form>
+    </div>
+
     <div class="comments">
         <h2>댓글</h2>
         <div class="comment" th:each="comment: ${comments}">
@@ -67,7 +91,6 @@
         </div>
     </div>
 </div>
-
 
 <footer th:replace="layout/footer::footer"></footer>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

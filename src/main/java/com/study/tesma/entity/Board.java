@@ -18,6 +18,9 @@ public class Board {
 
     private int userId;
 
+    @Column(nullable = true)
+    private Integer fileId;
+
     private String title;
 
     private String content;

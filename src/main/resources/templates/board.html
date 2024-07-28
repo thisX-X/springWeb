@@ -19,6 +19,7 @@
             margin-top: 20px;
         }
     </style>
+
 </head>
 <body>
 <header th:replace="layout/header::header"></header>
@@ -47,7 +48,7 @@
     </table>
 
     <div class="d-flex justify-content-end btn-write" th:if="${session.user != null}">
-        <button class="btn btn-primary" onclick="location.href='/writer'">글 작성</button>
+        <a class="btn btn-primary" th:href="${currentUrl + '/write'}">글 작성</a>
     </div>
 </div>
 

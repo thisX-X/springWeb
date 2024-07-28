@@ -7,16 +7,24 @@ import com.study.tesma.entity.Comment;
 import com.study.tesma.entity.User;
 import com.study.tesma.service.BoardService;
 import com.study.tesma.service.CommentService;
+import com.study.tesma.service.FileService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +35,8 @@ public class BoardController {
 
     @Autowired
     private CommentService commentService;
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -44,7 +54,10 @@ public class BoardController {
     }
 
     @GetMapping("/board/{boardName}")
-    public String board(Model model, @PathVariable String boardName) {
+    public String board(HttpServletRequest request, Model model, @PathVariable String boardName) {
+        String currentUrl = request.getRequestURL().toString();
+        model.addAttribute("currentUrl", currentUrl);
+
         int boardId = 0;
         switch (boardName) {
             case "free" -> boardId = 1;
@@ -78,9 +91,26 @@ public class BoardController {
         return "boardView";
     }
 
+    @GetMapping("/board/{boardName}/write")
+    public String write(Model model, @PathVariable String boardName) {
+        model.addAttribute("boardName", boardName);
+        return "boardWrite";
+    }
+
     @PostMapping("/board/{boardName}")
-    public String write(Model model, @PathVariable String boardName, HttpServletRequest request, HttpSession session) {
+    public String write(Model model, @PathVariable String boardName, HttpServletRequest request, HttpSession session, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        if (!file.isEmpty()) {
+            try {
+                fileService.storeFile(file);
+
+                redirectAttributes.addFlashAttribute("message",
+                        "You successfully uploaded '" + file.getOriginalFilename() + "'");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         int boardId = 0;
+        System.out.println(boardName);
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
@@ -90,12 +120,14 @@ public class BoardController {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
+        System.out.println(boardId);
+
         boardService.write(boardId, userId, title, content);
 
         return "redirect:/board/" + boardName;
     }
 
-    @PostMapping("/comment/{boardName}/{id}")
+    @PostMapping("/board/{boardName}/{id}/comment")
     public String commentWrite(Model model, @PathVariable String boardName, @PathVariable int id, HttpServletRequest request, HttpSession session) {
         int boardId = 0;
         switch (boardName) {
