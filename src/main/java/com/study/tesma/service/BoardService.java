@@ -31,10 +31,11 @@ public class BoardService {
         return boards;
     }
 
-    public void write(int boardId, int userId, String title, String content) {
+    public void write(int boardId, int userId, int fileId, String title, String content) {
         Board board = new Board();
         board.setBoardId(boardId);
         board.setUserId(userId);
+        board.setFileId(fileId);
         board.setTitle(title);
         board.setContent(content);
 

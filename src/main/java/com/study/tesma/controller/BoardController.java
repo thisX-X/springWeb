@@ -4,7 +4,9 @@ package com.study.tesma.controller;
 import com.study.tesma.ApiResponse;
 import com.study.tesma.entity.Board;
 import com.study.tesma.entity.Comment;
+import com.study.tesma.entity.File;
 import com.study.tesma.entity.User;
+import com.study.tesma.repository.FileRepository;
 import com.study.tesma.service.BoardService;
 import com.study.tesma.service.CommentService;
 import com.study.tesma.service.FileService;
@@ -25,6 +27,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +53,15 @@ public class BoardController {
             }
         }
 
-        model.addAttribute("boards", boards);
+        List<Board> AttBoard = new ArrayList<>();
+        for (int i = 3; i < 8; i++) {
+            AttBoard.add(boards.get(i));
+        }
+
+        Collections.reverse(AttBoard);
+
+
+        model.addAttribute("boards", AttBoard);
         return "main";
     }
 
@@ -82,6 +94,10 @@ public class BoardController {
         if (comments == null || comments.isEmpty()) {
             Object commnets = null;
         }
+        if (board.get().getFileId() != null) {
+            File file = fileService.findById(board.get().getFileId());
+            model.addAttribute("file", file);
+        }
 
         String currentUrl = ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString();
         model.addAttribute("currentUrl", currentUrl);
@@ -99,9 +115,11 @@ public class BoardController {
 
     @PostMapping("/board/{boardName}")
     public String write(Model model, @PathVariable String boardName, HttpServletRequest request, HttpSession session, @RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        Integer fileId = null;
         if (!file.isEmpty()) {
             try {
-                fileService.storeFile(file);
+                File savedFile = fileService.storeFile(file);
+                fileId = savedFile.getId();
 
                 redirectAttributes.addFlashAttribute("message",
                         "You successfully uploaded '" + file.getOriginalFilename() + "'");
@@ -110,7 +128,7 @@ public class BoardController {
             }
         }
         int boardId = 0;
-        System.out.println(boardName);
+
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
@@ -120,9 +138,9 @@ public class BoardController {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
-        System.out.println(boardId);
 
-        boardService.write(boardId, userId, title, content);
+
+        boardService.write(boardId, userId, fileId, title, content);
 
         return "redirect:/board/" + boardName;
     }
