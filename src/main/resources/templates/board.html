@@ -33,6 +33,7 @@
             <th scope="col">제목</th>
             <th scope="col">작성자</th>
             <th scope="col">작성일</th>
+            <th scope="col">비고</th>
         </tr>
         </thead>
         <tbody>
@@ -42,6 +43,17 @@
             <td><a th:text="${board.title}" th:href="${currentUrl + '/' + board.id}"></a></td>
             <td th:text="${board.writer}"></td>
             <td th:text="${board.updateAt}"></td>
+            <td>
+                <div th:if="${session.user != null and board.writer == session.user.name}">
+                    <a class="btn btn-warning btn-sm" th:href="${currentUrl + '/edit/' + board.id}">수정</a>
+
+                    <form th:action="${currentUrl + '/' + board.id}" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                        <input type="hidden" name="_method" value="delete"/>
+                        <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                    </form>
+
+                </div>
+            </td>
         </tr>
 
         </tbody>

@@ -46,6 +46,7 @@ public class BoardController {
     public String index(Model model) {
         List<Board> boards = boardService.getAllboard();
 
+        // 게시판 이름 설정
         for (Board board : boards) {
             switch (board.getBoardId()) {
                 case 1 -> board.setBoardName("free");
@@ -53,14 +54,19 @@ public class BoardController {
             }
         }
 
+        // 처음 5개의 요소만 가져오기
         List<Board> AttBoard = new ArrayList<>();
-        for (int i = 3; i < 8; i++) {
+        int size = Math.min(boards.size(), 5);
+
+        // 리스트를 역순으로 정렬
+        Collections.reverse(boards);
+
+        for (int i = 0; i < size; i++) {
             AttBoard.add(boards.get(i));
         }
 
-        Collections.reverse(AttBoard);
 
-
+        // 모델에 AttBoard 리스트 추가
         model.addAttribute("boards", AttBoard);
         return "main";
     }
