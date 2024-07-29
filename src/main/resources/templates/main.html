@@ -33,6 +33,15 @@
         .board-list li a:hover {
             text-decoration: underline;
         }
+        .login-form {
+            background-color: #ffffff;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+        }
+        .login-form h2 {
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body>
@@ -49,12 +58,31 @@
                 <li><a href="/board/notice">공지사항</a></li>
                 <li><a href="/board/free">자유게시판</a></li>
             </ul>
-        </div>
-        <div class="col-md-4">
             <h2>최근 글</h2>
             <ul class="board-list" th:each="board: ${boards}">
                 <li><a href="#" th:href="${'/board/' + board.getBoardName() + '/' + board.id}" th:text="${board.title}">최근 글 1</a></li>
             </ul>
+        </div>
+        <div class="col-md-4">
+            <div class="login-form" th:if="${session.user == null}">
+                <h2>로그인</h2>
+                <form method="post" action="/user">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">아이디</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">비밀번호</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">로그인</button>
+                </form>
+            </div>
+
+            <div class="login-form" th:if="${session.user != null}">
+                <h1><span class="navbar-text me-3">이름: [[${session.user.getName()}]]</span></h1>
+                <a class="btn btn-primary" href="/logout" style="margin-right: 10px">로그아웃</a>
+            </div>
         </div>
     </div>
 </div>

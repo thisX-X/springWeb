@@ -29,11 +29,16 @@ public class UserService {
         return returnUser;
     }
 
-    public void join(String email, String password, String name) {
+    public boolean join(String email, String password, String name) {
+        User joinedUser = userRepository.findByEmail(email);
+        if (joinedUser != null) {
+            return false;
+        }
         User user = new User();
         user.setEmail(email);
         user.setPassword(password);
         user.setName(name);
         userRepository.save(user);
+        return true;
     }
 }

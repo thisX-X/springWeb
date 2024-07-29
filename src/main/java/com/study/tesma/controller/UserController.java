@@ -43,9 +43,14 @@ public class UserController {
         String password = request.getParameter("password");
         String name = request.getParameter("name");
 
-        userService.join(email, password, name);
+        Boolean userTest = userService.join(email, password, name);
+        if (userTest) {
+            model.addAttribute("message", "가입이 완료되었습니다.");
+            return "login";
+        }
 
-        return "login";
+        model.addAttribute("message","이미 가입된 이메일 입니다.");
+        return "join";
     }
 
     @GetMapping("/logout")

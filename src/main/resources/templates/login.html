@@ -36,6 +36,12 @@
 <div class="container d-flex justify-content-center align-items-center min-vh-100">
     <div class="jumbotron">
         <h1 class="text-center">로그인</h1>
+
+        <!-- 메시지 표시 영역 -->
+        <div th:if="${message}" class="alert alert-info" role="alert">
+            <p th:text="${message}"></p>
+        </div>
+
         <form action="/user" method="post">
             <div class="input-group input-group-lg mt-4">
                 <span class="input-group-text" id="email">이메일</span>
