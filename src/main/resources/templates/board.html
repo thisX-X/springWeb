@@ -45,7 +45,7 @@
             <td th:text="${board.updateAt}"></td>
             <td>
                 <div th:if="${session.user != null and board.writer == session.user.name}">
-                    <a class="btn btn-warning btn-sm" th:href="${currentUrl + '/edit/' + board.id}">수정</a>
+                    <a class="btn btn-warning btn-sm" th:href="${currentUrl + '/' + board.id + '/update'}">수정</a>
 
                     <form th:action="${currentUrl + '/' + board.id}" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
                         <input type="hidden" name="_method" value="delete"/>

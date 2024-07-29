@@ -71,6 +71,36 @@ public class BoardController {
         return "main";
     }
 
+    @GetMapping("/board/{boardName}/{id}/update")
+    public String updateBoard(@PathVariable String boardName, @PathVariable int id, Model model) {
+        int boardId = 0;
+        switch (boardName) {
+            case "free" -> boardId = 1;
+            case "notice" -> boardId = 2;
+        }
+        Optional<Board> board = boardService.getBoard(boardId, id);
+        List<Comment> comments = commentService.getComments(id);
+        if (comments == null || comments.isEmpty()) {
+            Object commnets = null;
+        }
+        if (board.get().getFileId() != null) {
+            File file = fileService.findById(board.get().getFileId());
+            model.addAttribute("file", file);
+        }
+        File file = null;
+        if (board.get().getFileId() != null) {
+            file = fileService.findById(board.get().getFileId());
+        }
+
+        String currentUrl = ServletUriComponentsBuilder.fromCurrentRequestUri().toUriString();
+        model.addAttribute("currentUrl", currentUrl);
+        model.addAttribute("board", board.get());
+        model.addAttribute("file", file);
+        model.addAttribute("comments", comments);
+
+        return "boardWrite";
+    }
+
     @GetMapping("/board/{boardName}")
     public String board(HttpServletRequest request, Model model, @PathVariable String boardName) {
         String currentUrl = request.getRequestURL().toString();
