@@ -45,6 +45,11 @@ public class BoardController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/test")
+    public String test(Model model) {
+        return "header";
+    }
+
     @GetMapping("/")
     public String index(Model model) {
         List<Board> boards = boardService.getAllboard();
@@ -68,7 +73,6 @@ public class BoardController {
         for (int i = 0; i < size; i++) {
             AttBoard.add(boards.get(i));
         }
-
 
         // 모델에 AttBoard 리스트 추가
         model.addAttribute("boards", AttBoard);
@@ -138,6 +142,15 @@ public class BoardController {
         return "board";
     }
 
+    @GetMapping("/board/me")
+    public String me(HttpServletRequest request, Model model) {
+        User user = (User) request.getSession().getAttribute("user");
+        int userId = user.getId();
+        List<Board> boards = boardService.findByUserId(userId);
+        model.addAttribute("list", boards);
+        return "board";
+    }
+
     @GetMapping("/board/{boardName}/{id}")
     public String view(@PathVariable String boardName, @PathVariable int id, Model model) {
         int boardId = 0;
@@ -195,8 +208,6 @@ public class BoardController {
         int userId = user.getId();
         String title = request.getParameter("title");
         String content = request.getParameter("content");
-
-
 
         boardService.write(boardId, userId, fileId, title, content);
 

@@ -19,7 +19,6 @@ public class Board {
 
     private int userId;
 
-    @Column(nullable = true)
     private Integer fileId;
 
     private String title;
@@ -30,13 +29,9 @@ public class Board {
 
     private LocalDateTime updateAt;
 
-    @Setter
-    @Getter
     @Transient
     private String writer;
 
-    @Setter
-    @Getter
     @Transient
     private String boardName;
 }

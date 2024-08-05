@@ -18,6 +18,9 @@
         .board-list {
             list-style: none;
             padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
         .board-list li {
             background-color: #ffffff;
@@ -25,22 +28,70 @@
             padding: 1rem;
             border-radius: 0.5rem;
             box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+            flex: 1 1 calc(33.333% - 1rem);
         }
         .board-list li a {
             text-decoration: none;
-            color: #000;
+            color: #333;
         }
         .board-list li a:hover {
             text-decoration: underline;
+            color: #007bff;
         }
         .login-form {
             background-color: #ffffff;
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 0.5rem;
             box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
         }
-        .login-form h2 {
+        .login-form h2, .login-form h1 {
             margin-bottom: 1.5rem;
+        }
+        .login-form .navbar-text {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .aside-container {
+            flex: 0 0 200px;
+            margin-right: 20px;
+        }
+        .main-content {
+            flex: 1;
+            max-width: calc(100% - 220px);
+        }
+        aside > .menu, .admin-menu {
+            margin-bottom: 20px;
+        }
+        .menu ul, .admin-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .menu li, .admin-menu li {
+            margin: 10px 0;
+        }
+        .menu a, .admin-menu a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px;
+            display: block;
+            border-radius: 5px;
+        }
+        .menu a:hover, .admin-menu a:hover {
+            background-color: #e9ecef;
+        }
+        @media (max-width: 767.98px) {
+            .board-list li {
+                flex: 1 1 100%;
+            }
+            .aside-container {
+                flex: 0 0 100%;
+                max-width: 100%;
+                margin-right: 0;
+            }
+            .main-content {
+                max-width: 100%;
+            }
         }
     </style>
 </head>
@@ -52,18 +103,43 @@
         <p>게시판 메인 페이지 입니다.</p>
     </div>
     <div class="row">
-        <div class="col-md-8">
-            <h2>게시판 목록</h2>
-            <ul class="board-list">
-                <li><a href="/board/notice">공지사항</a></li>
-                <li><a href="/board/free">자유게시판</a></li>
-            </ul>
-            <h2>최근 글</h2>
-            <ul class="board-list" th:each="board: ${boards}">
-                <li><a href="#" th:href="${'/board/' + board.getBoardName() + '/' + board.id}" th:text="${board.title}">최근 글 1</a></li>
-            </ul>
+        <div class="col-md-3">
+            <aside class="aside-container">
+                <div class="menu">
+                    <ul>
+                        <li><a href="#">정보 수정</a></li>
+                        <li><a href="/board/me">내가 쓴 게시글</a></li>
+                        <li><a href="#">알림</a></li>
+                        <li><a href="#">정보</a></li>
+                    </ul>
+                </div>
+                <div class="admin-menu" th:if="${session.user?.grade == 1}">
+                    <ul>
+                        <li><a href="#">사이트 통계</a></li>
+                        <li><a href="#">사이트 등록</a></li>
+                        <li><a href="#">문제 등록</a></li>
+                        <li><a href="#">공지사항 등록</a></li>
+                    </ul>
+                </div>
+            </aside>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-6">
+            <div class="main-content">
+                <h2>게시판 목록</h2>
+                <ul class="board-list">
+                    <li><a href="/board/notice">공지사항</a></li>
+                    <li><a href="/board/free">자유게시판</a></li>
+                    <li><a href="/board/question">질문답변</a></li>
+                </ul>
+                <h2>최근글</h2>
+                <ul class="board-list">
+                    <li th:each="board: ${boards}">
+                        <a th:href="${'/board/' + board.getBoardName() + '/' + board.id}" th:text="${board.title}">최근 글 1</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-3">
             <div class="login-form" th:if="${session.user == null}">
                 <h2>로그인</h2>
                 <form method="post" action="/user">
@@ -80,8 +156,8 @@
             </div>
 
             <div class="login-form" th:if="${session.user != null}">
-                <h1><span class="navbar-text me-3">이름: [[${session.user.getName()}]]</span></h1>
-                <a class="btn btn-primary" href="/logout" style="margin-right: 10px">로그아웃</a>
+                <h1><span class="navbar-text">이름: [[${session.user.getName()}]]</span></h1>
+                <a class="btn btn-primary w-100 mb-2" href="/logout">로그아웃</a>
             </div>
         </div>
     </div>

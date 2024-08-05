@@ -14,7 +14,7 @@ import lombok.Setter;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String fileName;
     private String filePath;

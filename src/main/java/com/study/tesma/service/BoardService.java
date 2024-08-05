@@ -31,7 +31,7 @@ public class BoardService {
         return boards;
     }
 
-    public void write(int boardId, int userId, int fileId, String title, String content) {
+    public void write(int boardId, int userId, Integer fileId, String title, String content) {
         Board board = new Board();
         board.setBoardId(boardId);
         board.setUserId(userId);
@@ -64,6 +64,15 @@ public class BoardService {
 
     public List<Board> getAllboard() {
         List<Board> boards = boardRepository.findAll();
+        for (Board board : boards) {
+            User user = boardRepository.findByUserId(board.getUserId());
+            board.setWriter(user.getName());
+        }
+        return boards;
+    }
+
+    public List<Board> findByUserId(int userId) {
+        List<Board> boards = boardRepository.findAllByUserId(userId);
         for (Board board : boards) {
             User user = boardRepository.findByUserId(board.getUserId());
             board.setWriter(user.getName());

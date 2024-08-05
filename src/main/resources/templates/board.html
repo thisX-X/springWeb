@@ -10,6 +10,16 @@
         }
         .table-container {
             margin-top: 50px;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .aside-container {
+            flex: 0 0 200px;
+            margin-right: 20px;
+        }
+        .main-content {
+            flex: 1;
+            max-width: calc(100% - 220px);
         }
         .table thead {
             background-color: #343a40;
@@ -18,49 +28,98 @@
         .btn-write {
             margin-top: 20px;
         }
+        aside > .menu, .admin-menu {
+            margin-bottom: 20px;
+        }
+        .menu ul, .admin-menu ul {
+            list-style: none;
+            padding: 0;
+        }
+        .menu li, .admin-menu li {
+            margin: 10px 0;
+        }
+        .menu a, .admin-menu a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px;
+            display: block;
+            border-radius: 5px;
+        }
+        .menu a:hover, .admin-menu a:hover {
+            background-color: #e9ecef;
+        }
+        .table-container h1 {
+            margin-bottom: 20px;
+        }
+        .table tbody tr td {
+            vertical-align: middle;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+        }
     </style>
-
 </head>
 <body>
 <header th:replace="layout/header::header"></header>
 
 <div class="container table-container">
-    <h1 class="text-center">게시판</h1>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">제목</th>
-            <th scope="col">작성자</th>
-            <th scope="col">작성일</th>
-            <th scope="col">비고</th>
-        </tr>
-        </thead>
-        <tbody>
+    <aside class="aside-container">
+        <div class="menu">
+            <ul>
+                <li><a href="#">정보 수정</a></li>
+                <li><a href="/board/me">내가 쓴 게시글</a></li>
+                <li><a href="#">알림</a></li>
+                <li><a href="#">정보</a></li>
+            </ul>
+        </div>
+        <div class="admin-menu" th:if="${session.user?.grade == 1}">
+            <ul>
+                <li><a href="#">사이트 통계</a></li>
+                <li><a href="#">사이트 등록</a></li>
+                <li><a href="#">문제 등록</a></li>
+                <li><a href="#">공지사항 등록</a></li>
+            </ul>
+        </div>
+    </aside>
 
-        <tr th:each="board : ${list}">
-            <td th:text="${board.id}"></td>
-            <td><a th:text="${board.title}" th:href="${currentUrl + '/' + board.id}"></a></td>
-            <td th:text="${board.writer}"></td>
-            <td th:text="${board.updateAt}"></td>
-            <td>
-                <div th:if="${session.user != null and board.writer == session.user.name}">
-                    <a class="btn btn-warning btn-sm" th:href="${currentUrl + '/' + board.id + '/update'}">수정</a>
+    <div class="main-content">
+        <h1 class="text-center">게시판</h1>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일</th>
+                <th scope="col">비고</th>
+            </tr>
+            </thead>
+            <tbody>
 
-                    <form th:action="${currentUrl + '/' + board.id}" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                        <input type="hidden" name="_method" value="delete"/>
-                        <button type="submit" class="btn btn-danger btn-sm">삭제</button>
-                    </form>
+            <tr th:each="board : ${list}">
+                <td th:text="${board.id}"></td>
+                <td><a th:text="${board.title}" th:href="${currentUrl + '/' + board.id}"></a></td>
+                <td th:text="${board.writer}"></td>
+                <td th:text="${board.updateAt}"></td>
+                <td>
+                    <div th:if="${session.user != null and board.writer == session.user.name}">
+                        <a class="btn btn-warning btn-sm" th:href="${currentUrl + '/' + board.id + '/update'}">수정</a>
 
-                </div>
-            </td>
-        </tr>
+                        <form th:action="${currentUrl + '/' + board.id}" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                        </form>
 
-        </tbody>
-    </table>
+                    </div>
+                </td>
+            </tr>
 
-    <div class="d-flex justify-content-end btn-write" th:if="${session.user != null}">
-        <a class="btn btn-primary" th:href="${currentUrl + '/write'}">글 작성</a>
+            </tbody>
+        </table>
+
+        <div class="d-flex justify-content-end btn-write" th:if="${session.user != null}">
+            <a class="btn btn-primary" th:href="${currentUrl + '/write'}">글 작성</a>
+        </div>
     </div>
 </div>
 

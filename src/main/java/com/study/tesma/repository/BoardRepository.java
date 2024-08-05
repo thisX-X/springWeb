@@ -19,4 +19,7 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     User findByUserId(@Param("userId") int userId);
 
     List<Board> findTop5ByBoardIdOrderByCreateAtDesc(int boardId);
+
+    @Query("SELECT b FROM Board b WHERE b.userId = :userId")
+    List<Board> findAllByUserId(@Param("userId") int userId);
 }
