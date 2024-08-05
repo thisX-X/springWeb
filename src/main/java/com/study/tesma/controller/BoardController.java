@@ -10,6 +10,7 @@ import com.study.tesma.repository.FileRepository;
 import com.study.tesma.service.BoardService;
 import com.study.tesma.service.CommentService;
 import com.study.tesma.service.FileService;
+import com.study.tesma.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,8 @@ public class BoardController {
     private CommentService commentService;
     @Autowired
     private FileService fileService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/")
     public String index(Model model) {
@@ -51,6 +54,7 @@ public class BoardController {
             switch (board.getBoardId()) {
                 case 1 -> board.setBoardName("free");
                 case 2 -> board.setBoardName("notice");
+                case 3 -> board.setBoardName("question");
             }
         }
 
@@ -77,6 +81,7 @@ public class BoardController {
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
+            case "question" -> boardId = 3;
         }
         Optional<Board> board = boardService.getBoard(boardId, id);
         List<Comment> comments = commentService.getComments(id);
@@ -101,6 +106,20 @@ public class BoardController {
         return "boardWrite";
     }
 
+    @GetMapping("/grade")
+    public String grade(HttpSession session, Model model) {
+        if (session.getAttribute("user") == null) {
+            return "redirect:/login";
+        }
+        User user = (User) session.getAttribute("user");
+        if (user.getGrade() != 1) {
+            return "redirect:/login";
+        }
+        List<User> userList = userService.findAllUser();
+        model.addAttribute("userList", userList);
+        return "gradeMain";
+    }
+
     @GetMapping("/board/{boardName}")
     public String board(HttpServletRequest request, Model model, @PathVariable String boardName) {
         String currentUrl = request.getRequestURL().toString();
@@ -110,6 +129,7 @@ public class BoardController {
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
+            case "question" -> boardId = 3;
         }
 
         List<Board> list = boardService.getBoardList(boardId);
@@ -124,6 +144,7 @@ public class BoardController {
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
+            case "question" -> boardId = 3;
         }
         Optional<Board> board = boardService.getBoard(boardId, id);
         List<Comment> comments = commentService.getComments(id);
@@ -168,6 +189,7 @@ public class BoardController {
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
+            case "question" -> boardId = 3;
         }
         User user = (User) session.getAttribute("user");
         int userId = user.getId();
@@ -187,11 +209,12 @@ public class BoardController {
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
+            case "question" -> boardId = 3;
         }
         User user = (User) session.getAttribute("user");
         int userId = user.getId();
         String content = request.getParameter("content");
-        commentService.commentWrite(userId, boardId, content);
+        commentService.commentWrite(userId, id, content);
         return "redirect:/board/" + boardName + "/" + id;
     }
 
@@ -201,6 +224,7 @@ public class BoardController {
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
+            case "question" -> boardId = 3;
         }
         String title = request.getParameter("title");
         String content = request.getParameter("content");
@@ -216,6 +240,7 @@ public class BoardController {
         switch (boardName) {
             case "free" -> boardId = 1;
             case "notice" -> boardId = 2;
+            case "question" -> boardId = 3;
         }
         boardService.delete(id);
 

@@ -40,6 +40,9 @@
         .comment-author {
             font-weight: bold;
         }
+        .comment-create {
+            margin:0 0 0 auto;
+        }
         .comment-text {
             margin-top: 5px;
         }
@@ -109,6 +112,7 @@
         <h2>댓글</h2>
         <div class="comment" th:each="comment: ${comments}">
             <div class="comment-author" th:text="${comment.writer}">김철수</div>
+            <div class="comment-create" th:text="${comment.createAt}"></div>
             <div class="comment-text" th:text="${comment.content}">정말 좋은 글이네요. 많은 도움이 되었습니다!</div>
         </div>
     </div>

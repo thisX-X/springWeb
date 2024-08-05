@@ -5,6 +5,8 @@ import com.study.tesma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
@@ -21,6 +23,7 @@ public class UserService {
                 returnUser.setId(user.getId());
                 returnUser.setEmail(user.getEmail());
                 returnUser.setName(user.getName());
+                returnUser.setGrade(user.getGrade());
             }
             else {
                 return null;
@@ -40,5 +43,10 @@ public class UserService {
         user.setName(name);
         userRepository.save(user);
         return true;
+    }
+
+    public List<User> findAllUser() {
+        List<User> users = userRepository.findAll();
+        return users;
     }
 }

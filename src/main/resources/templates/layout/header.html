@@ -56,9 +56,10 @@
                         <a class="btn btn-secondary" href="/join">회원가입</a>
                     </div>
                     <div class="d-flex" th:if="${session.user != null}">
-                        <span class="navbar-text me-3">[[${session.user.getName()}]]님 반갑습니다.</span>
-                        <a class="nav-link" href="/user">회원 관리</a>
-                        <a class="nav-link" href="/logout">로그아웃</a>
+                        <span class="navbar-text me-3" style="margin-right: 10px">[[${session.user.getName()}]]님 반갑습니다.</span>
+                        <a class="btn btn-primary" href="/user" style="margin-right: 10px">회원 관리</a>
+                        <a th:if="${session.user.grade == 1}" class="btn btn-secondary" style="margin-right: 10px" href="/grade">관리자 페이지 이동</a>
+                        <a class="btn btn-primary" style="margin-right: 10px" href="/logout">로그아웃</a>
                     </div>
                 </div>
             </div>
