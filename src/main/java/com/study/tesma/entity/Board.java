@@ -15,7 +15,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int boardId;
+    private String boardName;
 
     private int userId;
 
@@ -31,7 +31,4 @@ public class Board {
 
     @Transient
     private String writer;
-
-    @Transient
-    private String boardName;
 }

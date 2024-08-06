@@ -12,13 +12,13 @@ import java.util.List;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer> {
 
-    @Query("SELECT b FROM Board b WHERE b.boardId = :boardId")
-    List<Board> findAllByBoardId(@Param("boardId") int boardId);
+    @Query("SELECT b FROM Board b WHERE b.boardName = :boardName")
+    List<Board> findAllByBoardName(@Param("boardName") String boardName);
 
     @Query("SELECT u FROM User u WHERE u.id = :userId")
     User findByUserId(@Param("userId") int userId);
 
-    List<Board> findTop5ByBoardIdOrderByCreateAtDesc(int boardId);
+    List<Board> findTop5ByBoardNameOrderByCreateAtDesc(String boardName);
 
     @Query("SELECT b FROM Board b WHERE b.userId = :userId")
     List<Board> findAllByUserId(@Param("userId") int userId);

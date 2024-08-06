@@ -54,15 +54,6 @@ public class BoardController {
     public String index(Model model) {
         List<Board> boards = boardService.getAllboard();
 
-        // 게시판 이름 설정
-        for (Board board : boards) {
-            switch (board.getBoardId()) {
-                case 1 -> board.setBoardName("free");
-                case 2 -> board.setBoardName("notice");
-                case 3 -> board.setBoardName("question");
-            }
-        }
-
         // 처음 5개의 요소만 가져오기
         List<Board> AttBoard = new ArrayList<>();
         int size = Math.min(boards.size(), 5);
@@ -81,13 +72,8 @@ public class BoardController {
 
     @GetMapping("/board/{boardName}/{id}/update")
     public String updateBoard(@PathVariable String boardName, @PathVariable int id, Model model) {
-        int boardId = 0;
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            case "question" -> boardId = 3;
-        }
-        Optional<Board> board = boardService.getBoard(boardId, id);
+
+        Optional<Board> board = boardService.getBoard(boardName, id);
         List<Comment> comments = commentService.getComments(id);
         if (comments == null || comments.isEmpty()) {
             Object commnets = null;
@@ -129,14 +115,7 @@ public class BoardController {
         String currentUrl = request.getRequestURL().toString();
         model.addAttribute("currentUrl", currentUrl);
 
-        int boardId = 0;
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            case "question" -> boardId = 3;
-        }
-
-        List<Board> list = boardService.getBoardList(boardId);
+        List<Board> list = boardService.getBoardList(boardName);
 
         model.addAttribute("list", list);
         return "board";
@@ -153,13 +132,8 @@ public class BoardController {
 
     @GetMapping("/board/{boardName}/{id}")
     public String view(@PathVariable String boardName, @PathVariable int id, Model model) {
-        int boardId = 0;
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            case "question" -> boardId = 3;
-        }
-        Optional<Board> board = boardService.getBoard(boardId, id);
+
+        Optional<Board> board = boardService.getBoard(boardName, id);
         List<Comment> comments = commentService.getComments(id);
         if (comments == null || comments.isEmpty()) {
             Object commnets = null;
@@ -197,31 +171,20 @@ public class BoardController {
                 e.printStackTrace();
             }
         }
-        int boardId = 0;
 
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            case "question" -> boardId = 3;
-        }
         User user = (User) session.getAttribute("user");
         int userId = user.getId();
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
-        boardService.write(boardId, userId, fileId, title, content);
+        boardService.write(boardName, userId, fileId, title, content);
 
         return "redirect:/board/" + boardName;
     }
 
     @PostMapping("/board/{boardName}/{id}/comment")
     public String commentWrite(Model model, @PathVariable String boardName, @PathVariable int id, HttpServletRequest request, HttpSession session) {
-        int boardId = 0;
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            case "question" -> boardId = 3;
-        }
+
         User user = (User) session.getAttribute("user");
         int userId = user.getId();
         String content = request.getParameter("content");
@@ -231,12 +194,7 @@ public class BoardController {
 
     @PatchMapping("/board/{boardName}/{id}")
     public String update(@PathVariable String boardName, @PathVariable int id, Model model, HttpServletRequest request) {
-        int boardId = 0;
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            case "question" -> boardId = 3;
-        }
+
         String title = request.getParameter("title");
         String content = request.getParameter("content");
 
@@ -247,12 +205,7 @@ public class BoardController {
 
     @DeleteMapping("/board/{boardName}/{id}")
     public String delete(Model model, @PathVariable String boardName, @PathVariable int id) {
-        int boardId = 0;
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            case "question" -> boardId = 3;
-        }
+
         boardService.delete(id);
 
         return "redirect:/board/" + boardName;
@@ -261,15 +214,6 @@ public class BoardController {
     /* 상태코드와 메시지로만(url이동 x) 전송하는 방법
     @DeleteMapping("/board/{boardName}/{id}")
     public ResponseEntity<ApiResponse> delete(Model model, @PathVariable String boardName, @PathVariable int id) {
-        int boardId = 0;
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-            default -> {
-                return new ResponseEntity<>(new ApiResponse(HttpStatus.BAD_REQUEST.value(), "Invalid board name"), HttpStatus.BAD_REQUEST);
-            }
-        }
-
         boardService.delete(id);
 
         ApiResponse response = new ApiResponse(HttpStatus.OK.value(), "Deleted successfully from " + boardName);

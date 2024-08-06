@@ -18,8 +18,8 @@ public class BoardService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<Board> getBoardList(int boardId) {
-        List<Board> boards = boardRepository.findTop5ByBoardIdOrderByCreateAtDesc(boardId);
+    public List<Board> getBoardList(String boardName) {
+        List<Board> boards = boardRepository.findTop5ByBoardNameOrderByCreateAtDesc(boardName);
         // List<Sample> findByGenderOrderByAgeDesc(String gender);
         //List<Sample> findAllByOrderByAgeDesc();
 
@@ -31,9 +31,9 @@ public class BoardService {
         return boards;
     }
 
-    public void write(int boardId, int userId, Integer fileId, String title, String content) {
+    public void write(String boardName, int userId, Integer fileId, String title, String content) {
         Board board = new Board();
-        board.setBoardId(boardId);
+        board.setBoardName(boardName);
         board.setUserId(userId);
         board.setFileId(fileId);
         board.setTitle(title);
@@ -46,7 +46,7 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
-    public Optional<Board> getBoard(int boardId, int id) {
+    public Optional<Board> getBoard(String boardName, int id) {
         Optional<Board> board = boardRepository.findById(id);
         User user = boardRepository.findByUserId(board.get().getUserId());
         board.get().setWriter(user.getName());

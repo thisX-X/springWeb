@@ -18,16 +18,7 @@ public class BoardAPIController {
 
     @GetMapping("/boardAPI/{boardName}")
     public List<Board> board(HttpServletRequest request, Model model, @PathVariable String boardName) {
-        int boardId = 0;
-
-        switch (boardName) {
-            case "free" -> boardId = 1;
-            case "notice" -> boardId = 2;
-        }
-
-        List<Board> boardList = boardService.getBoardList(boardId);
-
-
+        List<Board> boardList = boardService.getBoardList(boardName);
         return boardList;
     }
 }
