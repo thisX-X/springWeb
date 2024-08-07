@@ -33,6 +33,11 @@
 
 <header th:replace="layout/header :: header"></header>
 
+<!-- 메시지 표시 영역 -->
+<div th:if="${message}" class="alert alert-info" role="alert">
+    <p th:text="${message}"></p>
+</div>
+
 <div class="container" th:if="${board == null}">
     <h1 class="post-title">글 작성하기</h1>
     <form method="post" th:action="@{'/board/' + ${boardName}}" enctype="multipart/form-data">

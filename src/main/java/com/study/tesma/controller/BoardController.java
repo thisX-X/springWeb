@@ -2,15 +2,9 @@ package com.study.tesma.controller;
 
 
 import com.study.tesma.ApiResponse;
-import com.study.tesma.entity.Board;
-import com.study.tesma.entity.Comment;
-import com.study.tesma.entity.File;
-import com.study.tesma.entity.User;
+import com.study.tesma.entity.*;
 import com.study.tesma.repository.FileRepository;
-import com.study.tesma.service.BoardService;
-import com.study.tesma.service.CommentService;
-import com.study.tesma.service.FileService;
-import com.study.tesma.service.UserService;
+import com.study.tesma.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +38,8 @@ public class BoardController {
     private FileService fileService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private LoginUserService loginUserService;
 
     @GetMapping("/test")
     public String test(Model model) {
@@ -51,8 +47,10 @@ public class BoardController {
     }
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(HttpSession session, Model model) {
         List<Board> boards = boardService.getAllboard();
+        int loginedUser = 0;
+        loginedUser = loginUserService.count();
 
         // 처음 5개의 요소만 가져오기
         List<Board> AttBoard = new ArrayList<>();
@@ -64,6 +62,8 @@ public class BoardController {
         for (int i = 0; i < size; i++) {
             AttBoard.add(boards.get(i));
         }
+
+        model.addAttribute("loginedUser", loginedUser);
 
         // 모델에 AttBoard 리스트 추가
         model.addAttribute("boards", AttBoard);

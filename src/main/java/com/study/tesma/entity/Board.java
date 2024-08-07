@@ -31,4 +31,6 @@ public class Board {
 
     @Transient
     private String writer;
+
+
 }

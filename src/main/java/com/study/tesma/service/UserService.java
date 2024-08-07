@@ -14,16 +14,11 @@ public class UserService {
 
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email);
-
-
         User returnUser = new User();
 
         if (user != null) {
             if (user.getPassword().equals(password)) {
-                returnUser.setId(user.getId());
-                returnUser.setEmail(user.getEmail());
-                returnUser.setName(user.getName());
-                returnUser.setGrade(user.getGrade());
+                returnUser = user;
             }
             else {
                 return null;
@@ -48,5 +43,18 @@ public class UserService {
     public List<User> findAllUser() {
         List<User> users = userRepository.findAll();
         return users;
+    }
+
+    public void update(String name, String password) {
+        User user = userRepository.findByEmail(name);
+        user.setName(name);
+        user.setPassword(password);
+        userRepository.save(user);
+    }
+
+    public void update(String name) {
+        User user = userRepository.findByEmail(name);
+        user.setName(name);
+        userRepository.save(user);
     }
 }
