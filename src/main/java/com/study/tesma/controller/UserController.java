@@ -1,13 +1,10 @@
 package com.study.tesma.controller;
 
-import com.study.tesma.entity.LoginUser;
 import com.study.tesma.entity.User;
 import com.study.tesma.service.LoginUserService;
 import com.study.tesma.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.HttpSessionEvent;
-import jakarta.servlet.http.HttpSessionListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,12 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Controller
-public class UserController implements HttpSessionListener {
+public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -138,14 +135,5 @@ public class UserController implements HttpSessionListener {
         }
 
         return ip;
-    }
-
-
-
-    @Override
-    public void sessionDestroyed(HttpSessionEvent se) {
-        logout(se.getSession());
-        se.getSession().invalidate();
-
     }
 }

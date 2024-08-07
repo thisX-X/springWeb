@@ -66,6 +66,9 @@ public class BoardController {
             AttBoard.add(boards.get(i));
         }
 
+        String message = (String) model.getAttribute("message");
+
+        model.addAttribute("message", message);
         model.addAttribute("loginedUser", loginedUser);
 
         // 모델에 AttBoard 리스트 추가

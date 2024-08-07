@@ -97,10 +97,16 @@
 </head>
 <body>
 <header th:replace="layout/header::header"></header>
+<!-- 메시지 표시 영역 -->
+<div th:if="${message}" class="alert alert-info" role="alert">
+    <p th:text="${message}"></p>
+</div>
+
 <div class="container">
     <div class="jumbotron text-center">
         <h1>메인 페이지</h1>
         <p>게시판 메인 페이지 입니다.</p>
+
     </div>
     <div class="row">
         <div class="col-md-3">
