@@ -1,16 +1,21 @@
 package com.study.tesma.service;
 
+import com.study.tesma.entity.SessionKey;
 import com.study.tesma.entity.User;
+import com.study.tesma.repository.SessionKeyRepository;
 import com.study.tesma.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SessionKeyRepository sessionKeyRepository;
 
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email);
@@ -56,5 +61,18 @@ public class UserService {
         User user = userRepository.findByEmail(name);
         user.setName(name);
         userRepository.save(user);
+    }
+
+    public String findUserEmailBySessionKey(String sessionKey) {
+        Optional<SessionKey> sessionkey = sessionKeyRepository.findById(sessionKey);
+
+        SessionKey sec = sessionkey.get();
+        Optional<User> user = userRepository.findById(sec.getUserId());
+
+        return user.get().getEmail();
+    }
+
+    public User findByUserId(int userId) {
+        return userRepository.findById(userId).get();
     }
 }

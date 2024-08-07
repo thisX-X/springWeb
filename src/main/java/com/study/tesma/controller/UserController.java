@@ -45,9 +45,11 @@ public class UserController {
         String formatedNow = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss"));
 
         User user = userService.login(email, password);
-        loginUserService.login(email, ip, formatedNow);
+        loginUserService.login(email, ip, formatedNow, user.getId());
         if (user.getEmail() != null) {
-            session.setAttribute("user", user);
+            session.setAttribute("userName", user.getName());
+            session.setAttribute("userGrade", user.getGrade());
+            session.setAttribute("sessionKey", formatedNow);
         }
         return "redirect:/";
     }
@@ -83,10 +85,11 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        String email = user.getEmail();
-        loginUserService.logout(email);
-        session.removeAttribute("user");
+        String sessionKey = (String) session.getAttribute("sessionKey");
+
+        String email = userService.findUserEmailBySessionKey(sessionKey);
+        loginUserService.logout(email, sessionKey);
+        session.removeAttribute("sessionKey");
         return "redirect:/";
     }
 

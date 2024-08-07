@@ -72,7 +72,7 @@
                 <li><a href="/user/detail">정보</a></li>
             </ul>
         </div>
-        <div class="admin-menu" th:if="${session.user?.grade == 1}">
+        <div class="admin-menu" th:if="${session.userGrade == 1}">
             <ul>
                 <li><a href="#">사이트 통계</a></li>
                 <li><a href="#">사이트 등록</a></li>
@@ -101,7 +101,7 @@
                 <td th:text="${board.writer}"></td>
                 <td th:text="${board.updateAt}"></td>
                 <td>
-                    <div th:if="${session.user != null and board.writer == session.user.name}">
+                    <div th:if="${session.sessionKey != null and board.writer == session.userName}">
                         <a class="btn btn-warning btn-sm" th:href="${currentUrl + '/' + board.id + '/update'}">수정</a>
 
                         <form th:action="${currentUrl + '/' + board.id}" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
@@ -116,7 +116,7 @@
             </tbody>
         </table>
 
-        <div class="d-flex justify-content-end btn-write" th:if="${session.user != null}">
+        <div class="d-flex justify-content-end btn-write" th:if="${session.sessionKey != null}">
             <a class="btn btn-primary" th:href="${currentUrl + '/write'}">글 작성</a>
         </div>
     </div>

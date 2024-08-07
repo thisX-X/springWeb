@@ -69,17 +69,17 @@
                         <li class="nav-item"><a class="nav-link" href="/board/question">질문답변</a></li>
                         <li class="nav-item"><a class="nav-link" href="/board/notice">공지사항</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">관련사이트</a></li>
-                        <li class="nav-item" th:if="${session.user?.grade == 1}"><a class="nav-link" href="/grade">관리자 페이지</a></li>
+                        <li class="nav-item" th:if="${session.userGrade == 1}"><a class="nav-link" href="/grade">관리자 페이지</a></li>
                     </ul>
                     <div class="d-flex align-items-center">
                         <p class="me-3 mb-0">현재 로그인한 유저: [[${loginedUser}]]</p>
                     </div>
-                    <div class="d-flex" th:if="${session.user == null}">
+                    <div class="d-flex" th:if="${session.sessionKey == null}">
                         <a class="btn btn-primary me-2" href="/user">로그인</a>
                         <a class="btn btn-secondary" href="/join">회원가입</a>
                     </div>
-                    <div class="d-flex align-items-center" th:if="${session.user != null}">
-                        <span class="navbar-text me-3">[[${session.user.getName()}]]님 반갑습니다.</span>
+                    <div class="d-flex align-items-center" th:if="${session.sessionKey != null}">
+                        <span class="navbar-text me-3">[[${session.userName}]]님 반갑습니다.</span>
                         <a class="btn btn-primary me-2" href="/user">회원 관리</a>
                         <a class="btn btn-primary" href="/logout">로그아웃</a>
                     </div>

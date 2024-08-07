@@ -4,6 +4,7 @@ package com.study.tesma.controller;
 import com.study.tesma.ApiResponse;
 import com.study.tesma.entity.*;
 import com.study.tesma.repository.FileRepository;
+import com.study.tesma.repository.SessionKeyRepository;
 import com.study.tesma.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -40,6 +41,8 @@ public class BoardController {
     private UserService userService;
     @Autowired
     private LoginUserService loginUserService;
+    @Autowired
+    private SessionKeyRepository sessionKeyRepository;
 
     @GetMapping("/test")
     public String test(Model model) {
@@ -172,7 +175,9 @@ public class BoardController {
             }
         }
 
-        User user = (User) session.getAttribute("user");
+        String sessionKey = (String) session.getAttribute("sessionKey");
+        Optional<SessionKey> sessionKey1 = sessionKeyRepository.findById(sessionKey);
+        User user = userService.findByUserId(sessionKey1.get().getUserId());
         int userId = user.getId();
         String title = request.getParameter("title");
         String content = request.getParameter("content");
@@ -184,8 +189,9 @@ public class BoardController {
 
     @PostMapping("/board/{boardName}/{id}/comment")
     public String commentWrite(Model model, @PathVariable String boardName, @PathVariable int id, HttpServletRequest request, HttpSession session) {
-
-        User user = (User) session.getAttribute("user");
+        String sessionKey = (String) session.getAttribute("sessionKey");
+        Optional<SessionKey> sessionKey1 = sessionKeyRepository.findById(sessionKey);
+        User user = userService.findByUserId(sessionKey1.get().getUserId());
         int userId = user.getId();
         String content = request.getParameter("content");
         commentService.commentWrite(userId, id, content);

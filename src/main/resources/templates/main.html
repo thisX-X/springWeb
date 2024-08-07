@@ -113,7 +113,7 @@
                         <li><a href="#">정보</a></li>
                     </ul>
                 </div>
-                <div class="admin-menu" th:if="${session.user?.grade == 1}">
+                <div class="admin-menu" th:if="${session.userGrade== 1}">
                     <ul>
                         <li><a href="#">사이트 통계</a></li>
                         <li><a href="#">사이트 등록</a></li>
@@ -140,7 +140,7 @@
             </div>
         </div>
         <div class="col-md-3">
-            <div class="login-form" th:if="${session.user == null}">
+            <div class="login-form" th:if="${session.sessionKey == null}">
                 <h2>로그인</h2>
                 <form method="post" action="/user">
                     <div class="mb-3">
@@ -155,8 +155,8 @@
                 </form>
             </div>
 
-            <div class="login-form" th:if="${session.user != null}">
-                <h1><span class="navbar-text">이름: [[${session.user.getName()}]]</span></h1>
+            <div class="login-form" th:if="${session.sessionKey != null}">
+                <h1><span class="navbar-text">이름: [[${session.userName}]]</span></h1>
                 <a class="btn btn-primary w-100 mb-2" href="/logout">로그아웃</a>
             </div>
         </div>
