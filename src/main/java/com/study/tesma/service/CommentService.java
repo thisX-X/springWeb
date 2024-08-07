@@ -4,6 +4,8 @@ import com.study.tesma.entity.Board;
 import com.study.tesma.entity.Comment;
 import com.study.tesma.entity.User;
 import com.study.tesma.repository.CommentRepository;
+import jakarta.servlet.http.HttpSessionEvent;
+import jakarta.servlet.http.HttpSessionListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CommentService {
+public class CommentService implements HttpSessionListener {
     @Autowired
     private CommentRepository commentRepository;
 
@@ -32,4 +34,6 @@ public class CommentService {
         comment.setContent(content);
         commentRepository.save(comment);
     }
+
+
 }
